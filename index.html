@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Web Apps - ツール置き場</title>
+<style>
+  :root {
+    --bg: #141318;
+    --panel: #1C1B22;
+    --panel-alt: #201F27;
+    --border: #302E38;
+    --text: #EDEAE6;
+    --muted: #8D8A94;
+    --amber: #E2A542;
+    --teal: #4FBDAE;
+    --radius: 6px;
+  }
+  *{box-sizing:border-box;}
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0 0 8px;
+    letter-spacing: -0.02em;
+  }
+  header h1 span { color: var(--amber); }
+  .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    margin: 0;
+  }
+  .app-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .app-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .app-card:hover {
+    border-color: var(--amber);
+    transform: translateY(-2px);
+  }
+  .app-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--amber);
+    margin: 0 0 6px;
+  }
+  .app-desc {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0 0 12px;
+  }
+  .app-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    background: var(--panel-alt);
+    border: 1px solid var(--border);
+    color: var(--teal);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>My Web <span>Apps</span></h1>
+    <p class="subtitle">ブラウザで動く個人用便利ツール・ミニアプリ置き場</p>
+  </header>
+
+  <div class="app-list">
+    <!-- MP4 to GIF -->
+    <a href="https://n3060ai.github.io/mp4-to-gif/" class="app-card">
+      <h2 class="app-title">MP4 → GIF 変換ツール</h2>
+      <p class="app-desc">ブラウザ内だけで安全にMP4動画をGIFアニメに変換。解像度調整やフレームレート設定、サイズの見積もり機能付き。</p>
+      <span class="app-tag">HTML / JavaScript / Canvas</span>
+    </a>
+
+    <!-- Image Layer Merge Batch -->
+    <a href="https://n3060ai.github.io/image_layer_merge_batch/" class="app-card">
+      <h2 class="app-title">画像一括レイヤー合成ツール</h2>
+      <p class="app-desc">複数の画像をブラウザ上でまとめてレイヤー合成できるツール。</p>
+      <span class="app-tag">HTML / JavaScript</span>
+    </a>
+
+   <!-- LoopFinder -->
+    <a href="https://n3060ai.github.io/LoopFinder/" class="app-card">
+      <h2 class="app-title">Loopfinder</h2>
+      <p class="app-desc">音楽のループできそうな箇所を見つけるツール。</p>
+      <span class="app-tag">HTML / JavaScript</span>
+    </a>
+  
+   <!-- CollageThumbnailMaker -->
+    <a href="https://n3060ai.github.io/CollageThumbnailMaker/" class="app-card">
+      <h2 class="app-title">コラージュサムネ作成</h2>
+      <p class="app-desc">複数画像をまとめたサムネイルを作成するツール。</p>
+      <span class="app-tag">HTML / JavaScript</span>
+    </a>
+
+    <!-- ThumbnailMaker2 -->
+    <a href="https://n3060ai.github.io/ThumbnailMaker2/" class="app-card">
+      <h2 class="app-title">ThumbnailMaker2</h2>
+      <p class="app-desc">斜め分割サムネメーカー。👆の奴を自由度あげた版</p>
+      <span class="app-tag">HTML / JavaScript</span>
+    </a>
+    
+    <!-- LoopVideo -->
+    <a href="https://n3060ai.github.io/loopVideo/" class="app-card">
+      <h2 class="app-title">loopVideo</h2>
+      <p class="app-desc">動画のループできそうな箇所を見つけてgifかmp4でだしてくれる。</p>
+      <span class="app-tag">HTML / JavaScript</span>
+    </a>
+    <!-- img2gif -->
+    <a href="https://n3060ai.github.io/img2gif/" class="app-card">
+      <h2 class="app-title">img2gif</h2>
+      <p class="app-desc">画像 → GIFアニメ変換。1000枚くらいまではいけるはず。</p>
+      <span class="app-tag">HTML / JavaScript</span>
+    </a>
+    
+  </div>
+
+  <footer>
+    <p>&copy; n3060ai Apps</p>
+  </footer>
+</div>
+
+</body>
+</html>
