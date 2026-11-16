@@ -21,76 +21,106 @@
     background: var(--bg);
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    line-height: 1.6;
+    line-height: 1.5;
     margin: 0;
-    padding: 0;
   }
   .container {
-    max-width: 680px;
+    max-width: 960px;
     margin: 0 auto;
-    padding: 40px 20px 60px;
+    padding: 32px 16px 48px;
   }
-  header {
-    text-align: center;
-    margin-bottom: 40px;
-  }
+  header { text-align: center; margin-bottom: 24px; }
   header h1 {
-    font-size: 28px;
-    font-weight: 800;
-    margin: 0 0 8px;
-    letter-spacing: -0.02em;
+    font-size: 26px; font-weight: 800; margin: 0 0 6px; letter-spacing: -0.02em;
   }
   header h1 span { color: var(--amber); }
-  .subtitle {
-    color: var(--muted);
-    font-size: 14px;
-    margin: 0;
+  .subtitle { color: var(--muted); font-size: 13px; margin: 0; }
+
+  /* 検索 + カテゴリ絞り込み */
+  .toolbar {
+    position: sticky; top: 0; z-index: 5;
+    background: var(--bg);
+    padding: 10px 0 12px;
+    margin-bottom: 8px;
+    display: flex; flex-direction: column; gap: 10px;
   }
+  .search {
+    width: 100%;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-size: 14px;
+    padding: 9px 12px;
+    outline: none;
+  }
+  .search:focus { border-color: var(--amber); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .chip:hover { color: var(--text); }
+  .chip.active {
+    color: var(--bg);
+    background: var(--amber);
+    border-color: var(--amber);
+    font-weight: 700;
+  }
+
+  /* グリッド */
   .app-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
   }
   .app-card {
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 20px;
+    padding: 14px 16px;
     transition: border-color 0.15s ease, transform 0.15s ease;
     text-decoration: none;
     color: inherit;
-    display: block;
+    display: flex;
+    flex-direction: column;
   }
-  .app-card:hover {
-    border-color: var(--amber);
-    transform: translateY(-2px);
-  }
-  .app-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--amber);
-    margin: 0 0 6px;
-  }
+  .app-card:hover { border-color: var(--amber); transform: translateY(-2px); }
+  .app-card[hidden] { display: none; }
+  .app-title { font-size: 16px; font-weight: 700; color: var(--amber); margin: 0 0 4px; }
   .app-desc {
     color: var(--muted);
-    font-size: 13px;
-    margin: 0 0 12px;
+    font-size: 12.5px;
+    margin: 0 0 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
+  .tags { margin-top: auto; display: flex; gap: 6px; flex-wrap: wrap; }
   .app-tag {
-    display: inline-block;
     font-size: 11px;
     font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
     background: var(--panel-alt);
     border: 1px solid var(--border);
     color: var(--teal);
-    padding: 2px 8px;
+    padding: 1px 7px;
     border-radius: 4px;
   }
-  footer {
-    text-align: center;
-    margin-top: 50px;
-    font-size: 12px;
-    color: var(--muted);
+  .app-tag.cat { color: var(--amber); }
+
+  .empty { display: none; text-align: center; color: var(--muted); font-size: 14px; padding: 40px 0; }
+  footer { text-align: center; margin-top: 40px; font-size: 12px; color: var(--muted); }
+
+  @media (max-width: 560px) {
+    .app-list { grid-template-columns: 1fr; gap: 10px; }
+    .app-card { padding: 12px 14px; }
   }
 </style>
 </head>
@@ -102,68 +132,102 @@
     <p class="subtitle">ブラウザで動く個人用便利ツール・ミニアプリ置き場</p>
   </header>
 
-  <div class="app-list">
-    <!-- MP4 to GIF -->
-    <a href="https://n3060ai.github.io/mp4-to-gif/" class="app-card">
+  <div class="toolbar">
+    <input class="search" id="search" type="search" placeholder="ツールを検索…（例: gif, ループ, 学生証）">
+    <div class="chips" id="chips">
+      <button class="chip active" data-cat="all">すべて</button>
+      <button class="chip" data-cat="動画・GIF">動画・GIF</button>
+      <button class="chip" data-cat="画像">画像</button>
+      <button class="chip" data-cat="音楽">音楽</button>
+    </div>
+  </div>
+
+  <div class="app-list" id="list">
+
+    <a href="https://n3060ai.github.io/mp4-to-gif/" class="app-card" data-cat="動画・GIF">
       <h2 class="app-title">MP4 → GIF 変換ツール</h2>
       <p class="app-desc">ブラウザ内だけで安全にMP4動画をGIFアニメに変換。解像度調整やフレームレート設定、サイズの見積もり機能付き。</p>
-      <span class="app-tag">HTML / JavaScript / Canvas</span>
+      <div class="tags"><span class="app-tag cat">動画・GIF</span><span class="app-tag">HTML / JS / Canvas</span></div>
     </a>
 
-    <!-- Image Layer Merge Batch -->
-    <a href="https://n3060ai.github.io/image_layer_merge_batch/" class="app-card">
-      <h2 class="app-title">画像一括レイヤー合成ツール</h2>
-      <p class="app-desc">複数の画像をブラウザ上でまとめてレイヤー合成できるツール。</p>
-      <span class="app-tag">HTML / JavaScript</span>
-    </a>
-
-   <!-- LoopFinder -->
-    <a href="https://n3060ai.github.io/LoopFinder/" class="app-card">
-      <h2 class="app-title">Loopfinder</h2>
-      <p class="app-desc">音楽のループできそうな箇所を見つけるツール。</p>
-      <span class="app-tag">HTML / JavaScript</span>
-    </a>
-  
-   <!-- CollageThumbnailMaker -->
-    <a href="https://n3060ai.github.io/CollageThumbnailMaker/" class="app-card">
-      <h2 class="app-title">コラージュサムネ作成</h2>
-      <p class="app-desc">複数画像をまとめたサムネイルを作成するツール。</p>
-      <span class="app-tag">HTML / JavaScript</span>
-    </a>
-
-    <!-- ThumbnailMaker2 -->
-    <a href="https://n3060ai.github.io/ThumbnailMaker2/" class="app-card">
-      <h2 class="app-title">ThumbnailMaker2</h2>
-      <p class="app-desc">斜め分割サムネメーカー。👆の奴を自由度あげた版</p>
-      <span class="app-tag">HTML / JavaScript</span>
-    </a>
-    
-    <!-- LoopVideo -->
-    <a href="https://n3060ai.github.io/loopVideo/" class="app-card">
+    <a href="https://n3060ai.github.io/loopVideo/" class="app-card" data-cat="動画・GIF">
       <h2 class="app-title">loopVideo</h2>
       <p class="app-desc">動画のループできそうな箇所を見つけてgifかmp4でだしてくれる。</p>
-      <span class="app-tag">HTML / JavaScript</span>
+      <div class="tags"><span class="app-tag cat">動画・GIF</span><span class="app-tag">HTML / JS</span></div>
     </a>
-    <!-- img2gif -->
-    <a href="https://n3060ai.github.io/img2gif/" class="app-card">
+
+    <a href="https://n3060ai.github.io/img2gif/" class="app-card" data-cat="動画・GIF">
       <h2 class="app-title">img2gif</h2>
       <p class="app-desc">画像 → GIFアニメ変換。1000枚くらいまではいけるはず。</p>
-      <span class="app-tag">HTML / JavaScript</span>
+      <div class="tags"><span class="app-tag cat">動画・GIF</span><span class="app-tag">HTML / JS</span></div>
     </a>
-    
-    <!-- std-card -->
-    <a href="https://n3060ai.github.io/std-card/" class="app-card">
+
+    <a href="https://n3060ai.github.io/image_layer_merge_batch/" class="app-card" data-cat="画像">
+      <h2 class="app-title">画像一括レイヤー合成ツール</h2>
+      <p class="app-desc">複数の画像をブラウザ上でまとめてレイヤー合成できるツール。</p>
+      <div class="tags"><span class="app-tag cat">画像</span><span class="app-tag">HTML / JS</span></div>
+    </a>
+
+    <a href="https://n3060ai.github.io/CollageThumbnailMaker/" class="app-card" data-cat="画像">
+      <h2 class="app-title">コラージュサムネ作成</h2>
+      <p class="app-desc">複数画像をまとめたサムネイルを作成するツール。</p>
+      <div class="tags"><span class="app-tag cat">画像</span><span class="app-tag">HTML / JS</span></div>
+    </a>
+
+    <a href="https://n3060ai.github.io/ThumbnailMaker2/" class="app-card" data-cat="画像">
+      <h2 class="app-title">ThumbnailMaker2</h2>
+      <p class="app-desc">斜め分割サムネメーカー。コラージュサムネ作成の自由度を上げた版。</p>
+      <div class="tags"><span class="app-tag cat">画像</span><span class="app-tag">HTML / JS</span></div>
+    </a>
+
+    <a href="https://n3060ai.github.io/std-card/" class="app-card" data-cat="画像">
       <h2 class="app-title">学生証メーカー</h2>
       <p class="app-desc">学生証っぽいものを作りやすい。</p>
-      <span class="app-tag">HTML / JavaScript</span>
+      <div class="tags"><span class="app-tag cat">画像</span><span class="app-tag">HTML / JS</span></div>
     </a>
-    
+
+    <a href="https://n3060ai.github.io/LoopFinder/" class="app-card" data-cat="音楽">
+      <h2 class="app-title">Loopfinder</h2>
+      <p class="app-desc">音楽のループできそうな箇所を見つけるツール。</p>
+      <div class="tags"><span class="app-tag cat">音楽</span><span class="app-tag">HTML / JS</span></div>
+    </a>
+
   </div>
+
+  <p class="empty" id="empty">該当するツールがありません</p>
 
   <footer>
     <p>&copy; n3060ai Apps</p>
   </footer>
 </div>
+
+<script>
+  const cards = [...document.querySelectorAll('.app-card')];
+  const chips = [...document.querySelectorAll('.chip')];
+  const search = document.getElementById('search');
+  const empty = document.getElementById('empty');
+  let cat = 'all';
+
+  function apply() {
+    const q = search.value.trim().toLowerCase();
+    let shown = 0;
+    cards.forEach(c => {
+      const okCat = cat === 'all' || c.dataset.cat === cat;
+      const okQ = !q || c.textContent.toLowerCase().includes(q);
+      c.hidden = !(okCat && okQ);
+      if (!c.hidden) shown++;
+    });
+    empty.style.display = shown ? 'none' : 'block';
+  }
+
+  chips.forEach(ch => ch.addEventListener('click', () => {
+    chips.forEach(x => x.classList.remove('active'));
+    ch.classList.add('active');
+    cat = ch.dataset.cat;
+    apply();
+  }));
+  search.addEventListener('input', apply);
+</script>
 
 </body>
 </html>
